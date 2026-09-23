@@ -1,0 +1,79 @@
+:root {
+    --sl-stone-900: rgb(41, 37, 36);
+    --sl-stone-600: rgb(87, 83, 78);
+    --sl-white: rgb(255, 255, 255);
+    --sl-font-header-weight: 700;
+}
+
+.sl-text-dark {
+    color: var(--sl-stone-900);
+}
+
+.sl-text-muted {
+    color: var(--sl-stone-600);
+}
+
+.sl-bg-dark {
+    background-color: var(--sl-stone-900);
+}
+
+.sl-bg-white {
+    background-color: var(--sl-white);
+}
+
+.sl-border-white {
+    border: 1px solid var(--sl-white);
+}
+
+.sl-header-title {
+    color: var(--sl-stone-900);
+    font-weight: var(--sl-font-header-weight);
+}
+
+.sl-main-button {
+    background-color: var(--sl-stone-900);
+    color: var(--sl-white);
+    border: 1px solid var(--sl-white);
+}
+
+.sl-main-button:hover {
+    opacity: 0.9;
+}
+
+.sl-process-title {
+    color: var(--sl-white);
+    font-weight: 600;
+}
+
+.sl-process-text {
+    color: var(--sl-white);
+}
+
+.sl-process-number {
+    background-color: var(--sl-white);
+    color: var(--sl-stone-900);
+}
+
+.sl-transparent {
+    background-color: transparent;
+}
+
+.sl-modal-submit {
+    background-color: var(--sl-stone-900);
+}
+
+.sl-link-dark {
+    color: var(--sl-stone-900);
+}
+
+.sl-link-dark:hover {
+    color: var(--sl-stone-600);
+}
+
+.sl-mobile-link {
+    color: var(--sl-stone-600);
+}
+
+.sl-mobile-link:hover {
+    color: var(--sl-stone-900);
+}
