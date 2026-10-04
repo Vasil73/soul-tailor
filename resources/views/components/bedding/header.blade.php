@@ -8,7 +8,6 @@
         ->filter(fn(array $item): bool => filled($item['url'] ?? null));
 @endphp
 
-
 <header x-data="{
         mobileMenuOpened: false,
         contactsOpened: false,
@@ -71,27 +70,16 @@
            shadow-[0_8px_35px_rgba(87,72,68,0.06)]
            backdrop-blur-xl">
     <div class="mx-auto flex h-[80px] max-w-[1320px] items-center justify-between px-6 lg:px-10">
-        <a href="#top" class="group flex items-center gap-3" aria-label="Bedding Atelier — на главную" x-on:click="
-                contactsOpened = false;
-                mobileMenuOpened = false;
-            ">
-            <span class="flex h-11 w-11 items-center justify-center rounded-full
-                       bg-[#f3ded6] text-lg font-bold text-[#685048]
-                       shadow-sm transition group-hover:bg-[#b77e73]
-                       group-hover:text-white">
-                B
-            </span>
 
-            <span class="leading-tight">
-                <span class="block text-[17px] font-bold tracking-[-0.025em]">
-                    Bedding Atelier
-                </span>
-
-                <span class="mt-0.5 block text-[10px] font-semibold uppercase
-                           tracking-[0.16em] text-[#887a73]">
-                    Индивидуальный пошив
-                </span>
-            </span>
+        <a href="{{ route('home') }}" class="group flex shrink-0 items-center"
+            aria-label="Bedding Atelier — перейти на главную страницу" x-on:click="
+            contactsOpened = false;
+            mobileMenuOpened = false;
+        ">
+            <img src="{{ asset('images/logo/logo-b_a.png') }}" alt="Bedding Atelier" width="320" height="96" class="h-auto w-[180px] object-contain
+                   transition duration-300
+                   group-hover:opacity-90
+                   sm:w-[210px] xl:w-[230px]" fetchpriority="high">
         </a>
 
         {{-- Навигация для больших экранов --}}
@@ -104,7 +92,12 @@
 
             <a href="{{ route('fabrics') }}" :acctive="request()->routeIs('fabrics')"
                 class="text-[#72665f] transition hover:text-[#a96c62]">
-                {{ __('Коллекции') }}
+                {{ __('Ткани') }}
+            </a>
+
+            <a href="{{ route('our-works') }}" :active="request()->routeIs('sizes')"
+                class="text-[#72665f] transition hover:text-[#a96c62]">
+                {{ __('Наши работы') }}
             </a>
 
             <a href="{{ route('sizes') }}" :active="request()->routeIs('sizes')"
@@ -131,7 +124,7 @@
             @if (filled($phone))
                 <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}"
                     class="hidden text-[14px] font-bold transition
-                                                                                                               hover:text-[#a96c62] xl:inline">
+                                                                                                                                                           hover:text-[#a96c62] xl:inline">
                     {{ $phone }}
                 </a>
             @endif
@@ -163,28 +156,42 @@
     {{-- Мобильное меню --}}
     <nav id="header-mobile-menu" x-show="mobileMenuOpened" x-cloak x-transition aria-label="Мобильная навигация" class="border-t border-[#dacdc5] bg-[#fcf9f5]
                px-6 py-5 shadow-xl lg:hidden">
+
         <div class="mx-auto flex max-w-[1320px] flex-col gap-4 text-sm font-semibold">
-            <a href="#fabrics" x-on:click="mobileMenuOpened = false" class="py-1">
-                Коллекции
+
+            <a href="{{ route('home') }}" x-on:click="mobileMenuOpened = false" class="py-1">
+                {{ __('Главная') }}
             </a>
 
-            <a href="#sizes" x-on:click="mobileMenuOpened = false" class="py-1">
-                Размеры
+            <a href="{{ route('fabrics') }}" x-on:click="mobileMenuOpened = false" class="py-1">
+                {{ __('Ткани') }}
             </a>
 
-            <a href="#how-it-works" x-on:click="mobileMenuOpened = false" class="py-1">
-                Как мы работаем
+            <a href="{{ route('our-works') }}" x-on:click="mobileMenuOpened = false" class="py-1">
+                {{ __('Наши работы') }}
             </a>
 
-            <button type="button" x-on:click="openContacts()" x-bind:aria-expanded="contactsOpened.toString()"
+            <a href="{{ route('sizes') }}" x-on:click="mobileMenuOpened = false" class="py-1">
+                {{ __('Размеры') }}
+            </a>
+
+            <a href="{{ route('prcess') }}" x-on:click="mobileMenuOpened = false" class="py-1">
+                {{ __('Как мы работаем') }}
+            </a>
+
+            <a href="{{ route('contacts') }}" x-on:click="mobileMenuOpened = false" class="py-1">
+                {{ __('Контакты') }}
+            </a>
+
+            {{-- <button type="button" x-on:click="openContacts()" x-bind:aria-expanded="contactsOpened.toString()"
                 aria-controls="header-contacts" class="py-1 text-left">
-                Контакты и форма связи
-            </button>
+                Контакты
+            </button> --}}
 
-            <a href="#order" x-on:click="mobileMenuOpened = false" class="mt-2 inline-flex min-h-12 items-center
+            <a href="{{ route('order-form') }}" x-on:click="mobileMenuOpened = false" class="mt-2 inline-flex min-h-12 items-center
                        justify-center rounded-full bg-[#ad766c]
                        px-6 text-white">
-                Рассчитать стоимость
+                {{ __('Рассчитать стоимость') }}
             </a>
         </div>
     </nav>

@@ -20,7 +20,7 @@
         ];
     @endphp
 
-    <section id="sizes" class="scroll-mt-[90px] bg-bed-milk py-20 md:py-28">
+    <section id="sizes" class="scroll-mt-[90px] bg-bed-linen py-20 md:py-28">
         <div class="bed-container">
             <div class="grid gap-7 lg:grid-cols-[1.02fr_0.98fr] lg:items-stretch">
                 <div class="sizes-media min-h-[540px] rounded-[30px]
@@ -80,8 +80,8 @@
                         @foreach ($features as $index => $feature)
                             <div class="grid grid-cols-[42px_1fr] gap-4 py-6">
                                 <span class=" flex h-9 w-9 items-center justify-center
-                                                                   rounded-full bg-bed-milk text-[13px]
-                                                                   font-bold color-text_tailoring shadow-sm">
+                                                                       rounded-full bg-bed-milk text-[13px]
+                                                                       font-bold color-text_tailoring shadow-sm">
                                     {{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}
                                 </span>
 

@@ -7,6 +7,7 @@ use App\Livewire\Components\Bedding\Fabrics;
 use App\Livewire\Components\Bedding\Hero;
 use App\Livewire\Components\Bedding\HowItWorks;
 use App\Livewire\Components\Bedding\OrderForm;
+use App\Livewire\Components\Bedding\OurWorks;
 use Illuminate\Support\Facades\Route;
 
 Route::group([], function () {
@@ -30,11 +31,13 @@ Route::group([], function () {
     Route::get('/order-form', OrderForm::class)
         ->name('order-form');
 
+    Route::get('/our-works', OurWorks::class)
+        ->name('our-works');
     Route::get('/contacts', Contacts::class)
         ->name('contacts');
 });
 
-// Route::get(
-//     '/newsletter/unsubscribe/{token}',
-//     NewsletterUnsubscribeController::class,
-// )->name('newsletter.unsubscribe');
+Route::get(
+    '/newsletter/unsubscribe/{token}',
+    NewsletterUnsubscribeController::class,
+)->name('newsletter.unsubscribe');

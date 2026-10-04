@@ -6,20 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('bedding_orders', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('bedding_orders', function (Blueprint $t): void {
+            $t->id();
+            $t->string('name', 100);
+            $t->string('phone', 20);
+            $t->string('email')->nullable()->index();
+            $t->text('message');
+            $t->string('status', 30)->default('new')->index();
+            $t->string('ip_address', 45)->nullable();
+            $t->string('user_agent', 500)->nullable();
+            $t->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('bedding_orders');

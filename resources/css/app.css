@@ -44,6 +44,11 @@
         -webkit-font-smoothing: antialiased;
     }
 
+    section {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     button,
     input,
     textarea,

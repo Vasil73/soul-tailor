@@ -45,8 +45,8 @@
             </p>
 
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-                <a href="#order" class="bed-button-primary">
-                    Рассчитать стоимость
+                <a href="{{ route('order-form') }}" class="bed-button-primary">
+                    {{ __('Рассчитать стоимость') }}
 
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         aria-hidden="true">
@@ -54,11 +54,11 @@
                     </svg>
                 </a>
 
-                <a href="#fabrics" class="inline-flex min-h-[54px] items-center justify-center
+                <a href="{{ route('our-works') }}" class="inline-flex min-h-[54px] items-center justify-center
                            rounded-full border border-white/30 bg-white/10
                            px-7 font-bold text-white backdrop-blur-md
                            transition hover:border-white/60 hover:bg-white/20">
-                    Смотреть коллекции
+                    {{ __('Наши работы') }}
                 </a>
             </div>
         </div>
@@ -72,10 +72,10 @@
                     ['value' => '100%', 'text' => 'индивидуальные размеры'],
                 ] as $stat)
                 <div class="border-b border-white/15 px-6 py-5
-                                                               last:border-b-0 sm:border-b-0 sm:border-r
-                                                               sm:last:border-r-0">
+                                                                               last:border-b-0 sm:border-b-0 sm:border-r
+                                                                               sm:last:border-r-0">
                     <div class="text-[29px] font-bold tracking-[-0.04em]
-                                                                   text-[#ead3cb]">
+                                                                                   text-[#ead3cb]">
                         {{ $stat['value'] }}
                     </div>
 

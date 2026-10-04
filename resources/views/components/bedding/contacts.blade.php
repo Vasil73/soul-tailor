@@ -72,8 +72,8 @@ $@php
             </svg>
         </div>
 
-        <div class="flex mt-10">
-            <div class="mr-85">
+        <div class="flex justify-between text-wrap">
+            <div class="mr-[5px]">
 <p class="text-xs font-bold uppercase tracking-[0.16em]
                            text-[#a96c62]">
                     Где мы находимся
@@ -98,7 +98,7 @@ $@php
             Свяжитесь с нами удобным способом
         </h3>
 
-        <p class="mt-4 max-w-[430px] text-[15px]
+        <p class="mt-4 text-[15px]
                    leading-7 text-bed-muted">
             Ответим на вопросы, поможем подобрать ткань,
             рассчитаем стоимость и уточним детали заказа.
@@ -332,7 +332,7 @@ $@php
                 wire:target="submit"
                 class="inline-flex items-center gap-3"
             >
-                Отправить заявку
+                Отправить
 
                 <svg
                     class="h-5 w-5 transition-transform duration-200
