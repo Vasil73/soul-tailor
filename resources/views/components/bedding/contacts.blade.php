@@ -1,48 +1,3 @@
-$@php
-    $contactPhone = '+7 (831) 000-00-00';
-    $phoneHref = '+' . preg_replace('/\D/', '', $contactPhone);
-
-    $contactEmail = 'info@example.ru';
-
-    $socials = [
-        [
-            'type' => 'vk',
-            'name' => 'ВКонтакте',
-            'description' => 'Перейти в сообщество',
-            'href' => 'https://vk.com/your_page',
-            'iconClass' => 'bg-[#0077ff] text-white',
-        ],
-        [
-            'type' => 'telegram',
-            'name' => 'Telegram',
-            'description' => 'Написать в мессенджере',
-            'href' => 'https://t.me/your_username',
-            'iconClass' => 'bg-[#229ed9] text-white',
-        ],
-        [
-            'type' => 'rutube',
-            'name' => 'RUTUBE',
-            'description' => 'Мы на RUTUBE',
-            'href' => 'https://rutube.ru/channel/your_channel/',
-            'iconClass' => 'bg-[#100943] text-white',
-        ],
-        [
-            'type' => 'max',
-            'name' => 'MAX',
-            'description' => 'Написать в мессенджере',
-            'href' => 'https://max.ru/your_username',
-            'iconClass' => 'bg-[#596cff] text-white',
-        ],
-        [
-            'type' => 'email',
-            'name' => $contactEmail,
-            'description' => 'Написать на почту',
-            'href' => 'mailto:' . $contactEmail,
-            'iconClass' => 'bg-[#a96c62] text-white',
-        ],
-    ];
-@endphp
-
 <section class="relative mb-3 overflow-hidden
            border border-[#d8c4ba] bg-[#eadbd4]
             shadow-[0_20px_60px_rgba(87,72,68,0.10)]
@@ -106,7 +61,10 @@ $@php
 </div>
         </div>
 
-<form class="mt-7 grid grid-cols-1 items-start gap-4 lg:grid-cols-3">
+<form
+    wire:submit="submit"
+    class="mt-7 grid grid-cols-1 items-start gap-4 lg:grid-cols-3"
+>
 
     {{-- Телефон --}}
     <div class="min-w-0">
@@ -386,29 +344,38 @@ $@php
     </div>
 
     {{-- Сообщение об успешной отправке --}}
-    @if (session()->has('success'))
-        <div
-            role="status"
-            class="mt-4 flex items-start gap-3 rounded-2xl
-                   border border-emerald-200 bg-emerald-50
-                   px-4 py-3 text-sm leading-6 text-emerald-800"
+   @if ($sent)
+    <div
+        role="status"
+        class="mt-4 flex items-start gap-3 rounded-2xl
+               border border-emerald-200 bg-emerald-50
+               px-4 py-3 text-sm leading-6 text-emerald-800"
+    >
+        <svg
+            class="mt-0.5 h-5 w-5 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
         >
-            <svg
-                class="mt-0.5 h-5 w-5 shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-            >
-                <path d="M20 6 9 17l-5-5" />
-            </svg>
+            <path d="M20 6 9 17l-5-5" />
+        </svg>
 
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
+        <span>
+            Обращение отправлено. Мы свяжемся с вами
+            по указанной электронной почте.
+        </span>
+    </div>
+@endif
+
+    @error('email')
+    <p class="mt-2 px-1 text-[13px] leading-5 text-red-700">
+        {{ $message }}
+    </p>
+@enderror
 
     {{-- Общая ошибка отправки --}}
     @error('form')
@@ -437,12 +404,6 @@ $@php
         </div>
     @enderror
 
-
-        @error('email')
-            <p class="mt-2 px-1 text-[13px] leading-5 text-red-700">
-                {{ $message }}
-            </p>
-        @enderror
     </div>
     {{-- <p class="mt-3 text-[13px] leading-5 text-bed-muted">
             Принимаем обращения ежедневно с 9:00 до 20:00
@@ -459,7 +420,7 @@ $@php
 
             <div
     class="mt-4 grid grid-cols-1 gap-3
-           sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"role="list">
+           sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6"role="list">
                 @foreach ($socials as $social)
                <a
     href="{{ $social['href'] }}"
@@ -469,8 +430,8 @@ $@php
     @endif
     aria-label="{{ $social['name'] }} — {{ $social['description'] }}"
     role="listitem"
-    class="group flex min-h-[68px] min-w-0 items-center gap-4
-           rounded-2xl border border-white/80
+    class="group flex min-h-[68px] w-80 items-center gap-2
+           rounded-2x1 border border-white/80
            bg-white/75 px-4 py-3
            shadow-[0_8px_24px_rgba(87,72,68,0.06)]
            transition duration-200

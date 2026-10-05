@@ -69,15 +69,22 @@ class Contacts extends Component
         $this->name = trim($this->name);
         $this->email = mb_strtolower(trim($this->email));
 
-        $validated = $this->validate();
+        $validated = $this->validated();
 
-        $managerEmail = config('bedding.manager_email')
-            ?: config('mail.from.address');
+        $managerEmail = config('contacts.orders_email');
 
-        if (! $managerEmail) {
+        $managerEmail = is_string($managerEmail)
+            ? trim($managerEmail)
+            : '';
+
+        if (
+            $managerEmail === ''
+            || filter_var($managerEmail, FILTER_VALIDATE_EMAIL) === false
+        ) {
             $this->addError(
                 'form',
-                'Адрес получателя не настроен. Пожалуйста, свяжитесь с нами по телефону.'
+                'Адрес получателя не настроен или указан неверно. '
+                    .'Пожалуйста, свяжитесь с нами по телефону.'
             );
 
             return;
@@ -118,28 +125,71 @@ class Contacts extends Component
 
     public function render(): View
     {
-        $contactPhone = (string) config(
-            'bedding.contact_phone',
-            '+7 (831) 000-00-00'
+        $contactPhone = trim(
+            (string) config('contacts.contact_phone', '')
         );
 
-        $contactEmail = (string) config(
-            'bedding.contact_email',
-            'info@example.ru'
+        $contactEmail = trim(
+            (string) config('contacts.contact_email', '')
         );
 
-        $phoneDigits = preg_replace('/\D+/', '', $contactPhone) ?? '';
-        $phoneHref = '+'.$phoneDigits;
+        $phoneDigits = preg_replace(
+            '/\D+/',
+            '',
+            $contactPhone
+        ) ?? '';
 
-        $socials = config('bedding.socials', []);
+        $phoneHref = $phoneDigits !== ''
+            ? '+'.$phoneDigits
+            : '';
 
-        $socials[] = [
-            'type' => 'email',
-            'name' => $contactEmail,
-            'description' => 'Написать на почту',
-            'href' => 'mailto:'.$contactEmail,
-            'iconClass' => 'bg-[#a96c62] text-white',
+        // Оформление карточек относится к отображению,
+        // поэтому не хранится в настройках контактов.
+        $iconClasses = [
+            'vk' => 'bg-[#0077ff] text-white',
+            'telegram' => 'bg-[#229ed9] text-white',
+            'rutube' => 'bg-[#100943] text-white',
+            'max' => 'bg-[#596cff] text-white',
+            'email' => 'bg-[#a96c62] text-white',
         ];
+
+        $links = array_merge(
+            config('contacts.socials', []),
+            config('contacts.messengers', [])
+        );
+
+        $socials = [];
+
+        foreach ($links as $link) {
+            $type = (string) ($link['key'] ?? '');
+            $href = trim((string) ($link['url'] ?? ''));
+
+            // Не показываем карточки без ссылки или типа.
+            if ($type === '' || $href === '') {
+                continue;
+            }
+
+            $socials[] = [
+                'type' => $type,
+                'name' => (string) ($link['label'] ?? $type),
+                'description' => (string) (
+                    $link['description'] ?? ''
+                ),
+                'href' => $href,
+                'iconClass' => $iconClasses[$type]
+                    ?? 'bg-bed-blush text-bed-rose-dark',
+            ];
+        }
+
+        if ($contactEmail !== '') {
+            $socials[] = [
+                'type' => 'email',
+                'name' => $contactEmail,
+                'description' => 'Написать на почту',
+                'href' => 'mailto:'.$contactEmail,
+                'iconClass' => $iconClasses['email'],
+            ];
+        }
 
         return view('components.bedding.contacts', [
             'contactPhone' => $contactPhone,
