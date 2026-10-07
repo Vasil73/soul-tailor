@@ -34,11 +34,37 @@ final class OrderForm extends Component
     protected function rules(): array
     {
         return [
-            'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
-            'phone' => ['bail', 'required', 'string', 'regex:/^\+7\d{10}$/'],
-            'email' => ['bail', 'nullable', 'required_if:wantsNewsletter,true', 'string', 'email:rfc', 'max:255'],
-            'message' => ['bail', 'required', 'string', 'min:5', 'max:1000'],
-            'wantsNewsletter' => ['boolean'],
+            'name' => [
+                'bail',
+                'required',
+                'string',
+                'min:2',
+                'max:100',
+            ],
+            'phone' => [
+                'bail',
+                'required',
+                'string',
+                'regex:/^\+7[0-9]{10}$/',
+            ],
+            'email' => [
+                'bail',
+                'required_if:wantsNewsletter,true',
+                'nullable',
+                'string',
+                'email:rfc',
+                'max:255',
+            ],
+            'message' => [
+                'bail',
+                'required',
+                'string',
+                'min:5',
+                'max:1000',
+            ],
+            'wantsNewsletter' => [
+                'boolean',
+            ],
         ];
     }
 
@@ -46,16 +72,24 @@ final class OrderForm extends Component
     {
         return [
             'name.required' => 'Введите имя.',
+            'name.string' => 'Имя должно быть строкой.',
             'name.min' => 'Имя должно содержать не менее :min символов.',
             'name.max' => 'Имя не должно превышать :max символов.',
+
             'phone.required' => 'Введите телефон.',
+            'phone.string' => 'Номер телефона должен быть строкой.',
             'phone.regex' => 'Введите полный номер в формате +7 (999) 999-99-99.',
+
             'email.required_if' => 'Укажите электронную почту для подписки.',
+            'email.string' => 'Адрес электронной почты должен быть строкой.',
             'email.email' => 'Введите корректный адрес электронной почты.',
             'email.max' => 'Адрес не должен превышать :max символов.',
+
             'message.required' => 'Опишите, что хотите заказать.',
+            'message.string' => 'Описание должно быть строкой.',
             'message.min' => 'Описание должно содержать не менее :min символов.',
             'message.max' => 'Описание не должно превышать :max символов.',
+
             'wantsNewsletter.boolean' => 'Некорректное значение согласия на рассылку.',
         ];
     }
@@ -64,43 +98,126 @@ final class OrderForm extends Component
     {
         $this->sent = false;
         $this->resetValidation();
-        $key = 'bedding-order:'.(request()->ip() ?? 'unknown');
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            throw ValidationException::withMessages(['form' => 'Слишком много попыток. Повторите через '.RateLimiter::availableIn($key).' сек.']);
+
+        $rateLimitKey = 'bedding-order:'.(request()->ip() ?? 'unknown');
+
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 5)) {
+            $seconds = RateLimiter::availableIn($rateLimitKey);
+
+            throw ValidationException::withMessages([
+                'form' => 'Слишком много попыток. Повторите через '
+                    .$seconds.' сек.',
+            ]);
         }
+
+        // Учитываем попытку, даже если валидация или сохранение не пройдут.
+        RateLimiter::hit($rateLimitKey, 60);
+
         $this->name = trim($this->name);
         $this->phone = $this->normalizePhone($this->phone);
         $this->email = Str::lower(trim($this->email));
         $this->message = trim($this->message);
-        $v = $this->validate();
-        $data = ['name' => $v['name'], 'phone' => $v['phone'], 'email' => $v['email'] !== '' ? $v['email'] : null, 'message' => $v['message'], 'ip_address' => request()->ip(), 'user_agent' => Str::limit((string) request()->userAgent(), 500, '')];
-        try {
-            $order = DB::transaction(function () use ($data, $v): BeddingOrder {
-                $order = BeddingOrder::query()->create($data);
-                if ($v['wantsNewsletter'] && $data['email'] !== null) {
-                    NewsletterSubscriber::query()->updateOrCreate(['email' => $data['email']], ['name' => $data['name'], 'source' => 'bedding-order', 'unsubscribe_token' => Str::random(64), 'subscribed_at' => now(), 'unsubscribed_at' => null]);
-                }
 
-                return $order;
-            });
-        } catch (Throwable $e) {
-            report($e);
-            $this->addError('form', 'Не удалось сохранить заявку. Попробуйте позже.');
+        $validated = $this->validate();
+
+        $email = $validated['email'] ?? null;
+
+        $data = [
+            'name' => $validated['name'],
+            'phone' => $validated['phone'],
+            'email' => $email !== '' ? $email : null,
+            'message' => $validated['message'],
+            'ip_address' => request()->ip(),
+            'user_agent' => Str::limit(
+                (string) request()->userAgent(),
+                500,
+                ''
+            ),
+        ];
+
+        try {
+            $order = DB::transaction(
+                function () use ($data, $validated): BeddingOrder {
+                    $order = BeddingOrder::query()->create($data);
+
+                    if (
+                        $validated['wantsNewsletter']
+                        && $data['email'] !== null
+                    ) {
+                        $subscriber = NewsletterSubscriber::query()
+                            ->firstOrNew([
+                                'email' => $data['email'],
+                            ]);
+
+                        $subscriber->fill([
+                            'name' => $data['name'],
+                            'source' => 'bedding-order',
+                            'subscribed_at' => now(),
+                            'unsubscribed_at' => null,
+                        ]);
+
+                        // Не меняем существующий токен отписки.
+                        if (empty($subscriber->unsubscribe_token)) {
+                            $subscriber->unsubscribe_token = Str::random(64);
+                        }
+
+                        $subscriber->save();
+                    }
+
+                    return $order;
+                }
+            );
+        } catch (Throwable $exception) {
+            report($exception);
+
+            $this->addError(
+                'form',
+                'Не удалось сохранить заявку. Попробуйте позже.'
+            );
 
             return;
         }
-        RateLimiter::hit($key, 60);
-        $this->notify($order);
-        $this->reset(['name', 'phone', 'email', 'message', 'wantsNewsletter']);
+
+        // Заявка уже сохранена. Ошибка почты не отменяет сохранение.
+        $this->sendNotifications($order);
+
+        $this->reset([
+            'name',
+            'phone',
+            'email',
+            'message',
+            'wantsNewsletter',
+        ]);
+
+        $this->resetValidation();
         $this->sent = true;
     }
 
     public function updated(string $property): void
     {
-        if (in_array($property, ['name', 'phone', 'email', 'message', 'wantsNewsletter'], true)) {
-            $this->sent = false;
-            $this->resetValidation($property);
-            $this->resetValidation('form');
+        if (
+            ! in_array(
+                $property,
+                [
+                    'name',
+                    'phone',
+                    'email',
+                    'message',
+                    'wantsNewsletter',
+                ],
+                true
+            )
+        ) {
+            return;
+        }
+
+        $this->sent = false;
+
+        $this->resetValidation($property);
+        $this->resetValidation('form');
+
+        if ($property === 'wantsNewsletter') {
+            $this->resetValidation('email');
         }
     }
 
@@ -109,31 +226,79 @@ final class OrderForm extends Component
         return view('components.bedding.order-form');
     }
 
-    private function notify(BeddingOrder $order): void
+    private function sendNotifications(BeddingOrder $order): void
     {
-        try {
-            $admin = config('bedding.notifications.email');
-            if (is_string($admin) && $admin !== '') {
-                Notification::route('mail', $admin)->notify(new NewBeddingOrderNotification($order));
+        $adminEmail = config('order-bedding.notifications.email');
+
+        if (is_string($adminEmail)) {
+            $adminEmail = trim($adminEmail);
+
+            if (
+                $adminEmail !== ''
+                && filter_var(
+                    $adminEmail,
+                    FILTER_VALIDATE_EMAIL
+                ) !== false
+            ) {
+                try {
+                    Notification::route('mail', $adminEmail)
+                        ->notify(
+                            new NewBeddingOrderNotification($order)
+                        );
+                } catch (Throwable $exception) {
+                    report($exception);
+                }
             }
-            if ($order->email !== null) {
-                Notification::route('mail', $order->email)->notify(new BeddingOrderReceivedNotification($order));
+        }
+
+        // Отдельный try/catch: ошибка письма менеджеру
+        // не должна препятствовать уведомлению клиента.
+        if (
+            is_string($order->email)
+            && trim($order->email) !== ''
+        ) {
+            try {
+                Notification::route('mail', $order->email)
+                    ->notify(
+                        new BeddingOrderReceivedNotification($order)
+                    );
+            } catch (Throwable $exception) {
+                report($exception);
             }
-        } catch (Throwable $e) {
-            report($e);
         }
     }
 
     private function normalizePhone(string $phone): string
     {
-        $d = preg_replace('/\D+/', '', trim($phone)) ?? '';
-        if (preg_match('/^7\d{10}$/', $d)) {
-            return '+'.$d;
-        }
-        if (preg_match('/^8\d{10}$/', $d)) {
-            return '+7'.substr($d, 1);
+        $phone = trim($phone);
+
+        if ($phone === '') {
+            return '';
         }
 
-        return trim($phone);
+        // Не превращаем строку с буквами в допустимый номер.
+        if (preg_match('/^[+0-9()\s-]+$/D', $phone) !== 1) {
+            return $phone;
+        }
+
+        $digits = preg_replace('/[^0-9]+/', '', $phone) ?? '';
+
+        // Номер без кода страны: 9991234567.
+        if (preg_match('/^[0-9]{10}$/D', $digits) === 1) {
+            return '+7'.$digits;
+        }
+
+        // Номер с кодом страны: 79991234567.
+        if (preg_match('/^7[0-9]{10}$/D', $digits) === 1) {
+            return '+'.$digits;
+        }
+
+        // Номер с начальной восьмёркой: 89991234567.
+        if (preg_match('/^8[0-9]{10}$/D', $digits) === 1) {
+            return '+7'.substr($digits, 1);
+        }
+
+        // Неполный или неподходящий номер будет отклонён валидацией.
+        return $phone;
     }
 }

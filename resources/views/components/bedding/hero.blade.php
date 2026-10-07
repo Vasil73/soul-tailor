@@ -1,8 +1,8 @@
-<section id="top" class="relative isolate flex min-h-[760px] overflow-hidden
+<section id="top" class="relative isolate pt-[100px] flex min-h-[760px] overflow-hidden
            bg-bed-cocoa text-white lg:min-h-[700px]">
     <div wire:ignore class="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
         <video autoplay muted loop playsinline preload="metadata" poster="{{ asset('images/hero.jpg') }}"
-            class="hero-video">
+            class="hero-video" loading="lazy" decoding="async">
             <source src="{{ asset('video/hero.webm') }}" type="video/webm">
 
             <source src="{{ asset('video/hero_video.mp4') }}" type="video/mp4">
@@ -19,7 +19,8 @@
                to-transparent" aria-hidden="true"></div>
 
     <div class="bed-container relative z-10 flex w-full flex-col
-               justify-between pb-8 pt-16 lg:pb-10 lg:pt-24">
+               justify-between
+               lg:pb-19">
         <div class="max-w-[860px]">
             <div class="inline-flex items-center gap-3 rounded-full
                        border border-white/25 bg-white/12 px-4 py-2
@@ -40,8 +41,9 @@
 
             <p class="mt-7 max-w-[650px] text-[17px] leading-7 text-white/80
                        sm:text-[19px] sm:leading-8">
-                Шьём комплекты из приятных натуральных тканей по размерам
-                вашей кровати, матраса, одеяла и подушек.
+                Шьём постельное бельё под размеры вашей кровати,
+                одеяла и подушек. Помогаем выбрать ткань,
+                согласовать комплектацию и детали пошива.
             </p>
 
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -71,11 +73,13 @@
                     ['value' => '2–5 дней', 'text' => 'средний срок пошива'],
                     ['value' => '100%', 'text' => 'индивидуальные размеры'],
                 ] as $stat)
-                <div class="border-b border-white/15 px-6 py-5
-                                                                               last:border-b-0 sm:border-b-0 sm:border-r
-                                                                               sm:last:border-r-0">
-                    <div class="text-[29px] font-bold tracking-[-0.04em]
-                                                                                   text-[#ead3cb]">
+                <div
+                    class="border-b border-white/15 px-6 py-5
+                                                                                                                                                                                                           last:border-b-0 sm:border-b-0 sm:border-r
+                                                                                                                                                                                                           sm:last:border-r-0">
+                    <div
+                        class="text-[29px] font-bold tracking-[-0.04em]
+                                                                                                                                                                                                               text-[#ead3cb]">
                         {{ $stat['value'] }}
                     </div>
 

@@ -5,7 +5,7 @@
 
     <section id="process" class="relative scroll-mt-[90px] overflow-hidden
                bg-[linear-gradient(180deg,#f8f2ed_0%,#f5eee8_100%)]
-               py-20 md:py-28" aria-labelledby="process-heading">
+               py-20 md:py-28 lg:p-30" aria-labelledby="process-heading">
         {{-- Декоративные фоновые элементы --}}
         <div class="pointer-events-none absolute -left-32 top-20
                    h-72 w-72 rounded-full bg-bed-blush/20 blur-3xl" aria-hidden="true"></div>
@@ -36,11 +36,11 @@
             </div>
 
             {{-- Симметрично расположенная ссылка --}}
-            <div class="mt-10 mb-5 flex items-center justify-center gap-4 sm:gap-6">
+            {{-- <div class="mt-10 mb-5 flex items-center justify-center gap-4 sm:gap-6">
                 <span class="mb-20 h-px w-8 bg-[#d7c8bf]
                            sm:w-20 lg:w-32" aria-hidden="true"></span>
 
-                {{-- <a href="{{ route('our-works') }}" class="group inline-flex min-h-12 shrink-0
+                <a href="{{ route('our-works') }}" class="group inline-flex min-h-12 shrink-0
                            items-center justify-center gap-3
                            rounded-full border border-bed-rose/30
                            bg-bed-rose-dark px-6 py-3
@@ -63,12 +63,12 @@
                         <path d="M5 12h14" />
                         <path d="m13 6 6 6-6 6" />
                     </svg>
-                </a> --}}
+                </a>
 
                 <span class="h-px w-8 bg-[#d7c8bf]
                            sm:w-20 lg:w-32" aria-hidden="true"></span>
                 </span>
-            </div>
+            </div> --}}
 
             {{-- Этапы работы --}}
             <div class="relative mt-14 md:mt-16">
@@ -82,72 +82,72 @@
                     @forelse ($steps as $step)
                         <article
                             class="group relative flex h-full min-h-[290px]
-                                                                                                                       flex-col overflow-hidden rounded-[26px]
-                                                                                                                       border border-[#e0d5ce]
-                                                                                                                       bg-bed-milk p-6
-                                                                                                                       shadow-[0_12px_35px_rgba(87,72,68,0.05)]
-                                                                                                                       transition duration-300
-                                                                                                                       hover:-translate-y-1
-                                                                                                                       hover:border-bed-blush
-                                                                                                                       hover:shadow-[0_20px_45px_rgba(87,72,68,0.09)]">
+                                                                                                                                               flex-col overflow-hidden rounded-[26px]
+                                                                                                                                               border border-[#e0d5ce]
+                                                                                                                                               bg-bed-milk p-6
+                                                                                                                                               shadow-[0_12px_35px_rgba(87,72,68,0.05)]
+                                                                                                                                               transition duration-300
+                                                                                                                                               hover:-translate-y-1
+                                                                                                                                               hover:border-bed-blush
+                                                                                                                                               hover:shadow-[0_20px_45px_rgba(87,72,68,0.09)]">
                             {{-- Декоративное свечение --}}
                             <div class="pointer-events-none absolute
-                                                                                                                           -right-14 -top-14 h-36 w-36
-                                                                                                                           rounded-full bg-bed-blush/20
-                                                                                                                           transition duration-500
-                                                                                                                           group-hover:scale-125
-                                                                                                                           group-hover:bg-bed-blush/30"
+                                                                                                                                                   -right-14 -top-14 h-36 w-36
+                                                                                                                                                   rounded-full bg-bed-blush/20
+                                                                                                                                                   transition duration-500
+                                                                                                                                                   group-hover:scale-125
+                                                                                                                                                   group-hover:bg-bed-blush/30"
                                 aria-hidden="true">
                             </div>
 
                             {{-- Номер шага --}}
                             <div class="relative z-10 flex h-[70px] w-[70px]
-                                                                                                                           shrink-0 items-center justify-center
-                                                                                                                           rounded-full border-[7px]
-                                                                                                                           border-[#f5eee8] bg-bed-blush
-                                                                                                                           text-[17px] font-bold text-bed-cocoa
-                                                                                                                           shadow-[0_8px_20px_rgba(87,72,68,0.08)]
-                                                                                                                           transition duration-300
-                                                                                                                           group-hover:scale-105
-                                                                                                                           group-hover:bg-bed-rose
-                                                                                                                           group-hover:text-white"
+                                                                                                                                                   shrink-0 items-center justify-center
+                                                                                                                                                   rounded-full border-[7px]
+                                                                                                                                                   border-[#f5eee8] bg-bed-blush
+                                                                                                                                                   text-[17px] font-bold text-bed-cocoa
+                                                                                                                                                   shadow-[0_8px_20px_rgba(87,72,68,0.08)]
+                                                                                                                                                   transition duration-300
+                                                                                                                                                   group-hover:scale-105
+                                                                                                                                                   group-hover:bg-bed-rose
+                                                                                                                                                   group-hover:text-white"
                                 aria-hidden="true">
                                 {{ $step['number'] }}
                             </div>
 
                             <h3
                                 class="relative mt-7 text-[21px] font-bold
-                                                                                                                           leading-snug tracking-[-0.025em]
-                                                                                                                           text-bed-ink">
+                                                                                                                                                   leading-snug tracking-[-0.025em]
+                                                                                                                                                   text-bed-ink">
                                 {{ $step['title'] }}
                             </h3>
 
                             <p
                                 class="relative mt-3 text-[14px]
-                                                                                                                           leading-6 text-bed-muted">
+                                                                                                                                                   leading-6 text-bed-muted">
                                 {{ $step['text'] }}
                             </p>
 
                             {{-- Нижний декоративный элемент --}}
                             <div class="relative mt-auto flex items-center
-                                                                                                                           gap-2 pt-6 text-bed-rose-dark"
+                                                                                                                                                   gap-2 pt-6 text-bed-rose-dark"
                                 aria-hidden="true">
                                 <span
                                     class="h-1.5 w-1.5 rounded-full
-                                                                                                                               bg-current"></span>
+                                                                                                                                                       bg-current"></span>
 
                                 <span
                                     class="h-px w-8 bg-current
-                                                                                                                               transition-all duration-300
-                                                                                                                               group-hover:w-14"></span>
+                                                                                                                                                       transition-all duration-300
+                                                                                                                                                       group-hover:w-14"></span>
                             </div>
                         </article>
                     @empty
                         <div
                             class="rounded-[26px] border border-[#e0d5ce]
-                                                                                                                       bg-bed-milk p-8 text-center
-                                                                                                                       text-[15px] text-bed-muted
-                                                                                                                       sm:col-span-2 lg:col-span-4">
+                                                                                                                                               bg-bed-milk p-8 text-center
+                                                                                                                                               text-[15px] text-bed-muted
+                                                                                                                                               sm:col-span-2 lg:col-span-4">
                             Этапы работы временно не добавлены.
                         </div>
                     @endforelse
