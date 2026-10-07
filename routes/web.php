@@ -35,6 +35,9 @@ Route::group([], function () {
         ->name('our-works');
     Route::get('/contacts', Contacts::class)
         ->name('contacts');
+
+    // Route::get('/delivery', Contacts::class)
+    //     ->name('delivery');
 });
 
 Route::get(

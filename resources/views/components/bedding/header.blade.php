@@ -85,49 +85,39 @@
         {{-- Навигация для больших экранов --}}
         <nav class="hidden items-center gap-8 text-[14px] font-semibold lg:flex" aria-label="Основная навигация">
 
-            <a href="{{ route('home') }}" :active="request()->routeIs('home')"
-                class="text-[#72665f] transition hover:text-[#a96c62]">
+            <a href="{{ route('home') }}" class="text-[#72665f] transition hover:text-[#a96c62]">
                 {{ __('Главная') }}
             </a>
 
-            <a href="{{ route('fabrics') }}" :acctive="request()->routeIs('fabrics')"
-                class="text-[#72665f] transition hover:text-[#a96c62]">
+            <a href="{{ route('fabrics') }}" class="text-[#72665f] transition hover:text-[#a96c62]">
                 {{ __('Ткани') }}
             </a>
 
-            <a href="{{ route('our-works') }}" :active="request()->routeIs('sizes')"
-                class="text-[#72665f] transition hover:text-[#a96c62]">
+            <a href="{{ route('our-works') }}" class="text-[#72665f] transition hover:text-[#a96c62]">
                 {{ __('Наши работы') }}
             </a>
 
-            <a href="{{ route('sizes') }}" :active="request()->routeIs('sizes')"
-                class="text-[#72665f] transition hover:text-[#a96c62]">
+            <a href="{{ route('sizes') }}" class="text-[#72665f] transition hover:text-[#a96c62]">
                 {{ __('Размеры') }}
             </a>
 
-            <a href="{{ route('prcess') }}" :active="request()->routeIs('process')"
-                class="text-[#72665f] transition hover:text-[#a96c62]">
+            <a href="{{ route('prcess') }}" class="text-[#72665f] transition hover:text-[#a96c62]">
                 {{ __('Как мы работаем') }}
             </a>
 
-            {{-- <button type="button" x-on:click="openContacts()" x-bind:aria-expanded="contactsOpened.toString()"
-                aria-controls="header-contacts" class="text-[#72665f] transition hover:text-[#a96c62]">
-                Контакты
-            </button> --}}
             <a href="{{ route('contacts') }}" class="text-bed-muted transition
                 hover:text-bed-rose-dark">
                 {{ __('Контакты') }}
             </a>
+
+            {{-- <a href="{{ route('delivery') }}" class="text-bed-muted transition
+                            hover:text-bed-rose-dark">
+                {{ __('Доставка') }}
+            </a> --}}
+
         </nav>
 
         <div class="flex items-center gap-3">
-            @if (filled($phone))
-                <a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}"
-                    class="hidden text-[14px] font-bold transition
-                                                                                                                                                           hover:text-[#a96c62] xl:inline">
-                    {{ $phone }}
-                </a>
-            @endif
 
             <a href="{{ route('order-form') }}" class="hidden min-h-11 items-center justify-center
                        rounded-full bg-[#ad766c] px-6 text-[13px]
@@ -179,14 +169,13 @@
                 {{ __('Как мы работаем') }}
             </a>
 
+            {{-- <a href="{{ route('delivery') }}" x-on:click="mobileMenuOpened = false" class="py-1">
+                {{ __('Доставка') }}
+            </a> --}}
+
             <a href="{{ route('contacts') }}" x-on:click="mobileMenuOpened = false" class="py-1">
                 {{ __('Контакты') }}
             </a>
-
-            {{-- <button type="button" x-on:click="openContacts()" x-bind:aria-expanded="contactsOpened.toString()"
-                aria-controls="header-contacts" class="py-1 text-left">
-                Контакты
-            </button> --}}
 
             <a href="{{ route('order-form') }}" x-on:click="mobileMenuOpened = false" class="mt-2 inline-flex min-h-12 items-center
                        justify-center rounded-full bg-[#ad766c]
@@ -200,5 +189,4 @@
     <div x-show="contactsOpened" x-cloak x-transition.opacity x-on:click="contactsOpened = false" class="fixed inset-x-0 bottom-0 top-[80px]
                bg-[#1d1816]/60" aria-hidden="true"></div>
     </div>
-    </section>
 </header>

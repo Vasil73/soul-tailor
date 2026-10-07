@@ -80,41 +80,46 @@
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach ($fabrics as $fabric)
                     <article class="fabric-card group relative isolate flex min-h-[520px]
-                                                           overflow-hidden rounded-[28px] border border-white/30
-                                                           bg-bed-cocoa shadow-[0_18px_50px_rgba(64,54,51,0.16)]"
+                                                               overflow-hidden rounded-[28px] border border-white/30
+                                                               bg-bed-cocoa shadow-[0_18px_50px_rgba(64,54,51,0.16)]"
                         aria-label="{{ $fabric['alt'] }}">
                         {{-- Фоновое изображение на всю карточку --}}
-                        <div class="absolute inset-0 -z-30 bg-cover bg-center bg-no-repeat
-                                                               transition-transform duration-700 ease-out
-                                                               group-hover:scale-[1.05]"
+                        {{-- <div class="absolute inset-0 -z-30 bg-cover bg-center bg-no-repeat
+                                                                   transition-transform duration-700 ease-out
+                                                                   group-hover:scale-[1.05]"
                             style="background-image: url('{{ $fabric['image'] }}');" role="img"
-                            aria-label="{{ $fabric['alt'] }}"></div>
+                            aria-label="{{ $fabric['alt'] }}"></div> --}}
+                        <img src="{{ $fabric['image'] }}" alt="{{ $fabric['alt'] }}" width="1200" height="900"
+                            loading="lazy" decoding="async" class="absolute inset-0 -z-30 h-full w-full
+                                           object-cover object-center
+                                           transition-transform duration-700 ease-out
+                                           group-hover:scale-[1.05]">
 
                         {{-- Общее мягкое затемнение --}}
                         <div class="absolute inset-0 -z-20 bg-[#403633]/15
-                                                               transition-colors duration-500
-                                                               group-hover:bg-[#403633]/25" aria-hidden="true"></div>
+                                                                   transition-colors duration-500
+                                                                   group-hover:bg-[#403633]/25" aria-hidden="true"></div>
 
                         {{-- Градиент для читаемости текста --}}
                         <div class="absolute inset-0 -z-10 bg-gradient-to-b
-                                                               from-[#302724]/35 via-[#403633]/10
-                                                               to-[#302724]/95" aria-hidden="true"></div>
+                                                                   from-[#302724]/35 via-[#403633]/10
+                                                                   to-[#302724]/95" aria-hidden="true"></div>
 
                         {{-- Содержимое карточки --}}
                         <div class="flex min-h-[520px] w-full flex-col justify-between p-5 md:p-7">
                             {{-- Верхняя часть --}}
                             <div class="flex items-start justify-between gap-4">
                                 <span class="flex h-11 w-11 shrink-0 items-center justify-center
-                                                                       rounded-full border border-white/50 bg-white/80
-                                                                       text-[12px] font-bold text-bed-cocoa
-                                                                       shadow-md backdrop-blur-md">
+                                                                           rounded-full border border-white/50 bg-white/80
+                                                                           text-[12px] font-bold text-bed-cocoa
+                                                                           shadow-md backdrop-blur-md">
                                     {{ $fabric['number'] }}
                                 </span>
 
                                 <span class="rounded-full border border-white/30
-                                                                       bg-[#f3e4df]/90 px-4 py-2 text-[10px]
-                                                                       font-bold uppercase tracking-[0.1em]
-                                                                       text-bed-rose-dark shadow-md backdrop-blur-md">
+                                                                           bg-[#f3e4df]/90 px-4 py-2 text-[10px]
+                                                                           font-bold uppercase tracking-[0.1em]
+                                                                           text-bed-rose-dark shadow-md backdrop-blur-md">
                                     {{ $fabric['label'] }}
                                 </span>
                             </div>
@@ -122,30 +127,30 @@
                             {{-- Нижняя часть --}}
                             <div>
                                 <h3 class="text-[28px] font-bold leading-tight
-                                                                       tracking-[-0.035em] text-white
-                                                                       drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
+                                                                           tracking-[-0.035em] text-white
+                                                                           drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
                                     {{ $fabric['title'] }}
                                 </h3>
 
                                 <p class="mt-3 max-w-[390px] text-[14px] leading-6
-                                                                       text-white/85
-                                                                       drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
+                                                                           text-white/85
+                                                                           drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
                                     {{ $fabric['text'] }}
                                 </p>
 
                                 <div class="mt-6 flex items-center justify-between
-                                                                       border-t border-white/30 pt-5">
+                                                                           border-t border-white/30 pt-5">
                                     <span class="text-[19px] font-bold text-white
-                                                                           drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
+                                                                               drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
                                         {{ $fabric['price'] }}
                                     </span>
 
                                     <a href="#order" aria-label="Рассчитать комплект из ткани {{ $fabric['title'] }}" class="flex h-12 w-12 items-center justify-center
-                                                                           rounded-full border border-white/40
-                                                                           bg-white/85 text-bed-cocoa shadow-md
-                                                                           backdrop-blur-md transition duration-300
-                                                                           hover:scale-105 hover:border-bed-rose
-                                                                           hover:bg-bed-rose hover:text-white">
+                                                                               rounded-full border border-white/40
+                                                                               bg-white/85 text-bed-cocoa shadow-md
+                                                                               backdrop-blur-md transition duration-300
+                                                                               hover:scale-105 hover:border-bed-rose
+                                                                               hover:bg-bed-rose hover:text-white">
                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                             stroke-width="2" aria-hidden="true">
                                             <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round"

@@ -20,12 +20,12 @@
 
     <div class="bed-container relative z-10 flex w-full flex-col
                justify-between
-               lg:pb-19">
+               lg:pb-20">
         <div class="max-w-[860px]">
             <div class="inline-flex items-center gap-3 rounded-full
-                       border border-white/25 bg-white/12 px-4 py-2
+                       border border-white/25 bg-white/[0.12] px-4 py-2
                        text-[11px] font-bold uppercase tracking-[0.17em]
-                       text-white/90 backdrop-blur-md">
+                       text-white/[0,90] backdrop-blur-md">
                 <span class="h-2 w-2 rounded-full bg-[#e5c9c0]"></span>
                 Пошив по индивидуальным размерам
             </div>
@@ -75,11 +75,11 @@
                 ] as $stat)
                 <div
                     class="border-b border-white/15 px-6 py-5
-                                                                                                                                                                                                           last:border-b-0 sm:border-b-0 sm:border-r
-                                                                                                                                                                                                           sm:last:border-r-0">
+                                                                                                                                                                                                               last:border-b-0 sm:border-b-0 sm:border-r
+                                                                                                                                                                                                               sm:last:border-r-0">
                     <div
                         class="text-[29px] font-bold tracking-[-0.04em]
-                                                                                                                                                                                                               text-[#ead3cb]">
+                                                                                                                                                                                                                   text-[#ead3cb]">
                         {{ $stat['value'] }}
                     </div>
 
